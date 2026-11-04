@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f6f3ea" />
+    <meta name="description" content="捏一捏黄色软胶小家伙。拖动它，松手看它弹回去。" />
+    <title>捏捏它 · 黄色软胶角色</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <div class="wordmark" aria-hidden="true"><span class="wordmark-dot"></span> PLAY WITH ME</div>
+      <section class="play-area" aria-label="可拖拽的黄色软胶角色">
+        <div class="portrait" id="portrait" aria-describedby="hint">
+          <div class="portrait-disc" aria-hidden="true"></div>
+          <canvas id="face" aria-label="按住角色并拖动，松开后回弹"></canvas>
+          <img id="fallback" src="assets/smile.png" alt="一个抱着双臂的黄色软胶小家伙" draggable="false" />
+        </div>
+      </section>
+      <p class="hint" id="hint">按住它，随便拉。<span aria-hidden="true">↗</span></p>
+    </main>
+  </body>
+</html>

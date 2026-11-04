@@ -1,0 +1,10 @@
+{
+  "name": "yellow-plush-playground",
+  "version": "1.0.0",
+  "private": false,
+  "description": "A playful, mouse-driven elastic yellow character",
+  "scripts": {
+    "dev": "node server.mjs"
+  },
+  "license": "MIT"
+}
