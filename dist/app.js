@@ -10,10 +10,18 @@ const vertexSource = `
 
   void main() {
     vec2 offset = a_uv - u_grab;
-    float distanceSquared = dot(offset, offset);
-    float weight = exp(-1.8 * distanceSquared / (u_radius * u_radius));
-    vec2 position = a_uv + u_pull * weight;
-    gl_Position = vec4(position.x * 2.0 - 1.0, 1.0 - position.y * 2.0, 0.0, 1.0);
+    float distance = length(u_pull);
+    vec2 direction = u_pull / max(distance, 0.00001);
+    float along = dot(offset, direction);
+    vec2 sideways = offset - direction * along;
+    float across = exp(-dot(sideways, sideways) / (2.0 * u_radius * u_radius));
+    // Stretch the skin behind the grab; spread compression over the whole
+    // area ahead of it. A broad forward falloff keeps every cell upright.
+    float reach = along < 0.0 ? 0.25 : 0.35 + distance * 0.55;
+    float lengthwise = exp(-0.5 * along * along / (reach * reach));
+    vec2 position = a_uv + u_pull * across * lengthwise;
+    vec2 canvasPosition = 0.5 + (position - 0.5) / 1.8;
+    gl_Position = vec4(canvasPosition.x * 2.0 - 1.0, 1.0 - canvasPosition.y * 2.0, 0.0, 1.0);
     v_uv = a_uv;
   }
 `;
@@ -157,7 +165,7 @@ async function start() {
   }
 
   function resize() {
-    const rect = portrait.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     const width = Math.max(1, Math.round(rect.width * pixelRatio));
     const height = Math.max(1, Math.round(rect.height * pixelRatio));
@@ -211,7 +219,7 @@ async function start() {
     active = true;
     activePointer = event.pointerId;
     grab = p;
-    radius = p.y > 0.6 ? 0.27 : 0.18;
+    radius = p.y > 0.6 ? 0.28 : 0.23;
     target = { x: 0, y: 0 };
     velocity = { x: 0, y: 0 };
     portrait.setPointerCapture(event.pointerId);
@@ -222,7 +230,7 @@ async function start() {
     if (!active || event.pointerId !== activePointer) return;
     const p = point(event);
     target = { x: p.x - grab.x, y: p.y - grab.y };
-    clampVector(target, 0.7);
+    clampVector(target, 0.32);
     animate();
   });
 

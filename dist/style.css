@@ -12,6 +12,7 @@ html, body { min-height: 100%; }
 
 body {
   margin: 0;
+  overflow: hidden;
   background: var(--paper);
   color: var(--ink);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -30,13 +31,14 @@ body::before {
 
 .page {
   position: relative;
-  min-height: 100svh;
+  height: 100svh;
   max-width: 1600px;
   margin: 0 auto;
   padding: 28px clamp(20px, 4vw, 62px) 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 }
 
 .wordmark {
@@ -105,7 +107,7 @@ body::before {
   pointer-events: none;
 }
 
-#face, #fallback {
+#fallback {
   display: block;
   position: absolute;
   inset: 0;
@@ -115,7 +117,15 @@ body::before {
   pointer-events: none;
 }
 
-#face { opacity: 0; }
+#face {
+  display: block;
+  position: absolute;
+  inset: -40%;
+  width: 180%;
+  height: 180%;
+  pointer-events: none;
+  opacity: 0;
+}
 .ready #face { opacity: 1; }
 .ready #fallback { opacity: 0; }
 
@@ -138,7 +148,7 @@ body::before {
 
 @media (max-width: 700px) {
   .page { padding: 23px 15px 28px; }
-  .portrait { width: min(96vw, 74vh); }
+  .portrait { width: min(80vw, 66vh); }
   .wordmark { font-size: 9px; }
 }
 
